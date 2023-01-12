@@ -1,11 +1,11 @@
-﻿if ($PSVersionTable.PSVersion.Major -ne "7") { 
+#if ($PSVersionTable.PSVersion.Major -ne "7") {  #remove comments from this if you do not want to use loader.bat
 
-Write-Host "BACKUP Main dependency installation process starting: [Powershell7]"
-winget install --id Microsoft.Powershell --source winget
-Write-Host "PowerShell 7 Installed. Starting . . ."
-Start-Sleep 3
-Start-Process pwsh.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition)) #test
-exit }
+#Write-Host "BACKUP Main dependency installation process starting: [Powershell7]"
+#winget install --id Microsoft.Powershell --source winget
+#Write-Host "PowerShell 7 Installed. Starting . . ."
+#Start-Sleep 3
+#Start-Process pwsh.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition)) #test
+#exit }
 
 
 #function Test-Admin {
