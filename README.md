@@ -1,5 +1,5 @@
 # PrivacyEnforcerPS
-Semi-useful powershell script that allows blocking of scripts, cleaning logs etc.
+Semi-useful powershell script that allows blocking of IPs, cleaning logs etc.
 
 
 This script was mainly made for "Shell" learning.
