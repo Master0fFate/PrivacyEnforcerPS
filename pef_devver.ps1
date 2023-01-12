@@ -504,8 +504,8 @@ do
               Write-Host "github.com/Master0fFate"
               Write-Host "github.com/Baseult"
               Write-Host " "
-              Write-Host "Music:" -ForegroundColor White
-              Write-Host "youtube.com/@LHSchiptunes"
+              Write-Host ""
+              Write-Host ""
               Write-Host " "
               Write-Host "This script has been used as a learning project for Shell lang," 
               Write-Host "it might be absolutely useless, but still it served it's purpose as now I'm familliar with Shell"
