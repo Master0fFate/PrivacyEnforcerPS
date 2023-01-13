@@ -265,7 +265,6 @@ do
                         Write-Host " "
                         Write-Host "1. Lock a folder"
                         Write-Host "2. Unlock a folder"
-                        Write-Host "3. 3rd-party Locker Download"
                         Write-Host "B: To the previous menu"
                         $conf4 = Read-Host "Choose an option"
                         switch($conf4) {
