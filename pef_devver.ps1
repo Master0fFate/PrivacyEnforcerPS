@@ -1,4 +1,4 @@
-#if ($PSVersionTable.PSVersion.Major -ne "7") {  #remove comments from this if you do not want to use loader.bat
+#if ($PSVersionTable.PSVersion.Major -ne "7") {  #######remove comments from this if you do not want to use loader.bat
 
 #Write-Host "BACKUP Main dependency installation process starting: [Powershell7]"
 #winget install --id Microsoft.Powershell --source winget
@@ -544,11 +544,3 @@ do
  Remove-Item "$PSScriptRoot\requirements" -Recurse -Force -Confirm:$false | Out-Null
  stop-process -Id $PID
 
- 
-
-#New-ItemProperty -path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\explorer\" -Name "DisallowRun" -PropertyType DWord -Value "1"
-#New-item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\explorer\" -Name "DisallowRun"
-#$1 = "test.exe"dawd
-#New-ItemProperty -path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\explorer\DisallowRun" -Name "2" -PropertyType String -Value "$1"
-#Remove-Item -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\explorer\DisallowRun -Force -Verbose\
-#$debug11 = Get-BcdEntryDebugSettings
