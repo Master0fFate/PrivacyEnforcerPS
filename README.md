@@ -1,3 +1,5 @@
+WARN: Discontinued, might get rewritten, prob in a different lang.
+
 # PrivacyEnforcerPS
 Semi-useful powershell script that allows blocking of IPs, cleaning logs etc.
 
