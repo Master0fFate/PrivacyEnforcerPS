@@ -33,14 +33,14 @@ echo.
 echo Downloading prerequisites
 echo.
 echo.
-curl -L "https://raw.githubusercontent.com/Master0fFate/PrivacyEnforcerPS/main/pef_devver.ps1" -o "%temp%/PEF/pefxd.ps1"
+curl -L "https://raw.githubusercontent.com/Master0fFate/PrivacyEnforcerPS/main/pef2.ps1" -o "%temp%/PEF/pefxd.ps1"
 
-curl -L "https://github.com/PowerShell/PowerShell/releases/download/v7.3.4/PowerShell-7.3.4-win-x64.msi" -o "%temp%/PEF/PowerShell-7.3.0-win-x64.msi"
+curl -L "https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi" -o "%temp%/PEF/PowerShell-7.4.6-win-x64.msi"
 cd %temp%/PEF
 
 echo Download complete, starting install
 
-msiexec.exe /package PowerShell-7.3.4-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1 
+msiexec.exe /package PowerShell-7.4.6-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1 
 
 cd %temp%
 cls
