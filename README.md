@@ -34,5 +34,5 @@ resources.
 
 ## Attribution
 
-Original PowerShell concept by [Master0fFate](https:github.com/Master0fFate) with contributions from [Baseult](https:github.com/Baseult). Long delayed update happened. Finally lol.
+Original PowerShell concept by [Master0fFate](https://github.com/Master0fFate) with code snippets from [Baseult](https://github.com/Baseult) . Long delayed update happened. Finally lol.
 
