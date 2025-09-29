@@ -15,7 +15,7 @@ namespace PefCli
     {
         private const string Separator = "────────────────────────────────────────────────────────";
 
-        private static readonly string AppTitle = "🅿🅴🅵  Privacy Enforcement Framework";
+        private static readonly string AppTitle = ">>> [PEF]  Privacy Enforcement Framework - 2025 Edition";
 
         private static readonly string HostsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers", "etc", "hosts");
 
@@ -876,3 +876,4 @@ namespace PefCli
         }
     }
 }
+
