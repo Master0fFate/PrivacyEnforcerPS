@@ -27,10 +27,10 @@ are handled inside the app with confirmations and admin checks.
 
 ## Tips
 
-• Run the tool from an elevated console when editing ACLs, firewall rules, or the hosts file—Windows protects those
+- Run the tool from an elevated console when editing ACLs, firewall rules, or the hosts file—Windows protects those
 resources.
-• Use the Diagnostics module to review quick commands for reversing or auditing changes.
-• All destructive workflows prompt for confirmation and use safe defaults when a path or pattern is missing.
+- Use the Diagnostics module to review quick commands for reversing or auditing changes.
+- All destructive workflows prompt for confirmation and use safe defaults when a path or pattern is missing.
 
 ## Attribution
 
