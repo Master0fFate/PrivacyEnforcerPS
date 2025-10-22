@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -26,22 +27,30 @@ jobs:
       - name: Build
         run: dotnet build PrivacyEnforcerPro.sln -c Release --no-restore
 
-      - name: Publish UI (win-x64)
-        run: dotnet publish PrivacyEnforcerPro/PrivacyEnforcerPro.UI/PrivacyEnforcerPro.UI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --no-build
+      - name: Publish single-file EXE (win-x64)
+        run: >-
+          dotnet publish
+          PrivacyEnforcerPro/PrivacyEnforcerPro.UI/PrivacyEnforcerPro.UI.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:DebugType=None
+          --no-build
 
-      - name: Package artifact
+      - name: Find EXE path
         shell: pwsh
         run: |
           $publish = Get-ChildItem -Recurse -Directory "PrivacyEnforcerPro/PrivacyEnforcerPro.UI/bin/Release" | Where-Object { $_.FullName -like "*win-x64\\publish" } | Select-Object -First 1
-          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
-          $zipPath = "artifacts/$env:GITHUB_REF_NAME-PrivacyEnforcerPro-UI-win-x64.zip"
-          Compress-Archive -Path "$($publish.FullName)/*" -DestinationPath $zipPath -Force
-          "$([string]::Format('ZIP_PATH={0}', $zipPath))" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          if (-not $publish) { throw "Publish directory not found" }
+          $exe = Get-ChildItem -File -Filter *.exe $publish.FullName | Select-Object -First 1
+          if (-not $exe) { throw "EXE not found in publish directory" }
+          "EXE_PATH=$($exe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (attach EXE)
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.ZIP_PATH }}
+          files: ${{ env.EXE_PATH }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
