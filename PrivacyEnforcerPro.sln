@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrivacyEnforcerPro", "PrivacyEnforcerPro", "{2D026F19-51D5-4DFD-8035-46524D7B69F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivacyEnforcerPro.Core", "PrivacyEnforcerPro\PrivacyEnforcerPro.Core\PrivacyEnforcerPro.Core.csproj", "{450EF70C-39EA-4310-B6FA-1F364DF255F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivacyEnforcerPro.Infrastructure", "PrivacyEnforcerPro\PrivacyEnforcerPro.Infrastructure\PrivacyEnforcerPro.Infrastructure.csproj", "{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivacyEnforcerPro.Modules", "PrivacyEnforcerPro\PrivacyEnforcerPro.Modules\PrivacyEnforcerPro.Modules.csproj", "{E64E40F8-6B17-496B-8A73-217A64E2441C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivacyEnforcerPro.UI", "PrivacyEnforcerPro\PrivacyEnforcerPro.UI\PrivacyEnforcerPro.UI.csproj", "{6FA03F8E-182F-40A6-BBED-97948871DB04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivacyEnforcerPro.Tests", "PrivacyEnforcerPro\PrivacyEnforcerPro.Tests\PrivacyEnforcerPro.Tests.csproj", "{F2197D26-6285-468F-81C3-F08851097DBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{450EF70C-39EA-4310-B6FA-1F364DF255F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{450EF70C-39EA-4310-B6FA-1F364DF255F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{450EF70C-39EA-4310-B6FA-1F364DF255F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{450EF70C-39EA-4310-B6FA-1F364DF255F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64E40F8-6B17-496B-8A73-217A64E2441C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64E40F8-6B17-496B-8A73-217A64E2441C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64E40F8-6B17-496B-8A73-217A64E2441C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64E40F8-6B17-496B-8A73-217A64E2441C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA03F8E-182F-40A6-BBED-97948871DB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA03F8E-182F-40A6-BBED-97948871DB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA03F8E-182F-40A6-BBED-97948871DB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA03F8E-182F-40A6-BBED-97948871DB04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2197D26-6285-468F-81C3-F08851097DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2197D26-6285-468F-81C3-F08851097DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2197D26-6285-468F-81C3-F08851097DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2197D26-6285-468F-81C3-F08851097DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{450EF70C-39EA-4310-B6FA-1F364DF255F8} = {2D026F19-51D5-4DFD-8035-46524D7B69F7}
+		{E79CAD98-2735-4FC8-B090-54B2EBF1D0C1} = {2D026F19-51D5-4DFD-8035-46524D7B69F7}
+		{E64E40F8-6B17-496B-8A73-217A64E2441C} = {2D026F19-51D5-4DFD-8035-46524D7B69F7}
+		{6FA03F8E-182F-40A6-BBED-97948871DB04} = {2D026F19-51D5-4DFD-8035-46524D7B69F7}
+		{F2197D26-6285-468F-81C3-F08851097DBB} = {2D026F19-51D5-4DFD-8035-46524D7B69F7}
+	EndGlobalSection
+EndGlobal
