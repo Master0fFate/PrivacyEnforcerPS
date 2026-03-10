@@ -12,6 +12,8 @@ using PrivacyEnforcerPro.Modules.ServiceManagementModule;
 using PrivacyEnforcerPro.Modules.StartupControlModule;
 using PrivacyEnforcerPro.Modules.SystemHardeningModule;
 using PrivacyEnforcerPro.Modules.DiagnosticsModule;
+using PrivacyEnforcerPro.Modules.SystemRestoreModule;
+using PrivacyEnforcerPro.Modules.LoglessEnvironmentModule;
 using PrivacyEnforcerPro.Core.Interfaces;
 using System.Diagnostics;
 using System.Text;
@@ -70,6 +72,8 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IPrivacyModule, StartupControlModule>();
         services.AddSingleton<IPrivacyModule, SystemHardeningModule>();
         services.AddSingleton<IPrivacyModule, DiagnosticsModule>();
+        services.AddSingleton<IPrivacyModule, SystemRestoreModule>();
+        services.AddSingleton<IPrivacyModule, LoglessEnvironmentModule>();
     });
 
 using var host = builder.Build();
@@ -97,9 +101,11 @@ static async Task ShowMainMenuAsync(IServiceProvider sp, string logFile)
         AnsiConsole.WriteLine("(6) 🚀 Startup Control");
         AnsiConsole.WriteLine("(7) 🔐 System Hardening");
         AnsiConsole.WriteLine("(8) 📊 Diagnostics & Reports");
+        AnsiConsole.WriteLine("(9) ⏪ System Restore Point");
+        AnsiConsole.WriteLine("(10) 🕵️ Log-less Environment");
         AnsiConsole.WriteLine("\n(0) ❌ Exit\n");
 
-        var choice = AnsiConsole.Ask<string>("Select module (1-8, 0 to exit):");
+        var choice = AnsiConsole.Ask<string>("Select module (1-10, 0 to exit):");
         IPrivacyModule? module = choice switch
         {
             "1" => sp.GetServices<IPrivacyModule>().OfType<TelemetryEliminationModule>().FirstOrDefault(),
@@ -110,6 +116,8 @@ static async Task ShowMainMenuAsync(IServiceProvider sp, string logFile)
             "6" => sp.GetServices<IPrivacyModule>().OfType<StartupControlModule>().FirstOrDefault(),
             "7" => sp.GetServices<IPrivacyModule>().OfType<SystemHardeningModule>().FirstOrDefault(),
             "8" => sp.GetServices<IPrivacyModule>().OfType<DiagnosticsModule>().FirstOrDefault(),
+            "9" => sp.GetServices<IPrivacyModule>().OfType<SystemRestoreModule>().FirstOrDefault(),
+            "10" => sp.GetServices<IPrivacyModule>().OfType<LoglessEnvironmentModule>().FirstOrDefault(),
             "0" => null,
             _ => null
         };
