@@ -17,6 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PrivacyEnforcerPro.Core\PrivacyEnforcerPro.Core.csproj" />
+    <ProjectReference Include="..\PrivacyEnforcerPro.Infrastructure\PrivacyEnforcerPro.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
