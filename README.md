@@ -11,15 +11,15 @@ legacy source only and are not exposed by the application. Do not run `BACKUP/`.
 ## Requirements
 
 - A currently serviced Windows 11 Pro, Enterprise or Education installation
-- .NET 8 SDK to build (or .NET 8 runtime for framework-dependent binaries)
+- .NET 10 SDK to build (or .NET 10 runtime for framework-dependent binaries)
 - Normal terminal for audit; administrator terminal only for applying/restoring
 - Windows Home, Server, Windows 10 and non-Windows hosts are rejected for policy
   access. `list` and `help` work anywhere. The OS gate checks build 22000+ and an
   explicit edition allowlist; it does not determine your edition's servicing date.
 
-.NET 8 remains the existing target. Plan a move to the next LTS before its support
-ends; use Microsoft's [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
-and [Windows release health](https://learn.microsoft.com/en-us/windows/release-health/) to check support.
+.NET 10 is the LTS target. Check Microsoft's [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
+and [Windows release health](https://learn.microsoft.com/en-us/windows/release-health/)
+for runtime and operating-system servicing requirements.
 
 ## Start with an audit
 
