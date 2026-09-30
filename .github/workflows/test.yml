@@ -1,0 +1,24 @@
+name: Build and test privacy safety
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore PrivacyEnforcerPro.sln
+      - run: dotnet build PrivacyEnforcerPro.sln --configuration Release --no-restore
+      - run: dotnet test PrivacyEnforcerPro.sln --configuration Release --no-build --logger trx
+      - name: Exercise read-only catalog
+        run: dotnet run --project PrivacyEnforcerPro/PrivacyEnforcerPro.UI --configuration Release --no-build -- list --json
