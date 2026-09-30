@@ -22,3 +22,59 @@ jobs:
       - run: dotnet test PrivacyEnforcerPro.sln --configuration Release --no-build --logger trx
       - name: Exercise read-only catalog
         run: dotnet run --project PrivacyEnforcerPro/PrivacyEnforcerPro.UI --configuration Release --no-build -- list --json
+  package-windows:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          dotnet-version: '10.0.x'
+      - name: Publish self-contained Windows x64 executable
+        run: >-
+          dotnet publish PrivacyEnforcerPro/PrivacyEnforcerPro.UI/PrivacyEnforcerPro.UI.csproj
+          --configuration Release --runtime win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=false
+          -p:DebugType=None -p:DebugSymbols=false --output release
+      - name: Smoke-test packaged executable without touching policies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem release -File)
+          if ($files.Count -ne 1 -or $files[0].Name -ne 'PrivacyEnforcerPro.UI.exe') {
+            throw 'Expected exactly one standalone executable before generating metadata'
+          }
+          $exe = (Resolve-Path release/PrivacyEnforcerPro.UI.exe).Path
+          $version = (Get-Item $exe).VersionInfo.ProductVersion
+          if ($version -notlike '0.2.0-rc.1*') { throw 'Unexpected release version' }
+          $catalog = & $exe list --json
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged catalog command failed' }
+          $policies = @($catalog | ConvertFrom-Json)
+          if ($policies.Count -ne 7) { throw 'Unexpected policy catalog size' }
+          & $exe help
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged help command failed' }
+          & $exe enforce --select deliberately-invalid-policy
+          if ($LASTEXITCODE -ne 1) { throw 'Invalid policy must fail before registry access' }
+          $global:LASTEXITCODE = 0
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  PrivacyEnforcerPro.UI.exe" | Set-Content release/SHA256SUMS.txt -Encoding utf8NoBOM
+          @{
+            sourceCommit = $env:GITHUB_SHA
+            version = $version
+            target = 'win-x64'
+            selfContained = $true
+            signed = $false
+            sdk = (dotnet --version)
+            file = 'PrivacyEnforcerPro.UI.exe'
+            sha256 = $hash
+          } | ConvertTo-Json | Set-Content release/build-metadata.json -Encoding utf8NoBOM
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: PrivacyEnforcerPro-win-x64
+          path: release/
+          if-no-files-found: error
+          retention-days: 30

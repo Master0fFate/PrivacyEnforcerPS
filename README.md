@@ -11,7 +11,7 @@ legacy source only and are not exposed by the application. Do not run `BACKUP/`.
 ## Requirements
 
 - A currently serviced Windows 11 Pro, Enterprise or Education installation
-- .NET 10 SDK to build (or .NET 10 runtime for framework-dependent binaries)
+- .NET 10 SDK to build; the Windows x64 release EXE includes its runtime
 - Normal terminal for audit; administrator terminal only for applying/restoring
 - Windows Home, Server, Windows 10 and non-Windows hosts are rejected for policy
   access. `list` and `help` work anywhere. The OS gate checks build 22000+ and an
@@ -120,3 +120,30 @@ use the [manual validation checklist](docs/WINDOWS-VALIDATION.md).
 
 Exit codes: `0` successful read/preview/write or user cancellation; `1` invalid
 input, unsupported platform or stopped operation; `2` audit contains unknowns.
+
+## Release executable
+
+**Preview release:** Native Windows policy enforcement and restore validation are
+still pending. This is a prerelease, not a production validation claim. Complete
+the manual VM checklist before promoting it to a stable release.
+
+`PrivacyEnforcerPro.UI.exe` retains the previous release asset name. Version 0.2.0-rc.1
+is a self-contained Windows x64 single-file build: no separate .NET installation
+is required. The larger download includes the .NET 10 runtime. ARM64 and 32-bit
+native builds are not included. Binaries are unsigned, so Windows may display an
+unrecognized-publisher warning; inspect the source and SHA-256 checksum before
+choosing whether to run them. No signing credentials are required by the build.
+
+From a terminal, run `PrivacyEnforcerPro.UI.exe list` or
+`PrivacyEnforcerPro.UI.exe audit` first. The old interactive menu is replaced by
+explicit commands; see the examples above (omit the `dotnet run ... --` prefix).
+Do not elevate merely to inspect the catalog or audit. Native libraries may be
+extracted to the normal .NET temporary bundle directory at startup.
+
+After the Linux/Windows tests pass on a main-branch push, CI publishes the EXE,
+`SHA256SUMS.txt`, and `build-metadata.json` in the `PrivacyEnforcerPro-win-x64`
+workflow artifact. The metadata records the exact source commit and target.
+Read-only packaged-binary smoke tests run on Windows. This does not validate
+actual policy enforcement. The workflow never creates or publishes a Release;
+release publication is a separate deliberate step. Rebuild and redistribute
+self-contained binaries for future .NET security servicing updates.
