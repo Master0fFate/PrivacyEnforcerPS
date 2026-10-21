@@ -271,6 +271,14 @@ cargo run -p pef-cli -- list          # read-only, works on any OS
 cargo run -p pef-gui                  # opens in simulation off Windows
 ```
 
+To cross-build the Windows executables from Linux or macOS, add the `x86_64-pc-windows-gnu`
+target and a MinGW-w64 toolchain, then build `pef-cli` with `--release` and `pef-gui` with
+`--profile cross` (the desktop app's release profile needs the Windows SDK's shader compiler,
+which only exists on Windows; the `cross` profile compiles shaders at runtime instead).
+
+`scripts/package.sh` gathers whatever was built into `dist/` as archives with SHA-256 sums
+and build metadata, the same layout the release workflow publishes.
+
 The suite covers:
 
 - the engine rules above, driven against an in-memory store with failure injection, including

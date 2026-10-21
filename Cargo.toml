@@ -45,3 +45,12 @@ all = "warn"
 opt-level = 3
 lto = "thin"
 strip = true
+
+# Cross-building the desktop app for Windows from another OS: the Windows renderer embeds
+# precompiled HLSL only in release builds, and the compiler (fxc.exe) exists only in the
+# Windows SDK. With debug assertions on, shaders are compiled at runtime instead, so this
+# profile is release-optimised but skips the SDK requirement. Native Windows releases use
+# the plain release profile.
+[profile.cross]
+inherits = "release"
+debug-assertions = true
