@@ -1,0 +1,64 @@
+name: CI
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+permissions:
+  contents: read
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+jobs:
+  test:
+    name: Build and test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Install Linux build dependencies for GPUI
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-xkb-dev \
+            libxcb-xfixes0-dev libxcb-randr0-dev libxcb-xinput-dev libxcb-cursor-dev \
+            libxcb-res0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libdbus-1-dev \
+            libfontconfig-dev libfreetype-dev libssl-dev libvulkan-dev
+      - name: Install the pinned Rust toolchain
+        run: rustup show active-toolchain
+      - uses: Swatinem/rust-cache@v2
+      - name: Formatting
+        run: cargo fmt --all --check
+      - name: Lints
+        run: cargo clippy --workspace --all-targets
+      - name: Tests
+        run: cargo test --workspace
+      - name: Exercise the read-only catalog
+        run: cargo run -p pef-cli -- list --json
+      - name: Refuse an invalid selection before any platform access
+        shell: bash
+        run: |
+          set +e
+          cargo run -q -p pef-cli -- enforce --select deliberately-invalid-policy
+          code=$?
+          set -e
+          test "$code" -eq 1
+  windows-cross-check:
+    name: Cross-check Windows targets from Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Install the pinned Rust toolchain and the Windows target
+        run: |
+          rustup show active-toolchain
+          rustup target add x86_64-pc-windows-gnu
+      - uses: Swatinem/rust-cache@v2
+      - name: Type-check every crate for Windows
+        run: cargo check --workspace --all-targets --target x86_64-pc-windows-gnu

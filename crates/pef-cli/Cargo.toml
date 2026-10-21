@@ -1,0 +1,28 @@
+[package]
+name = "pef-cli"
+description = "Audit-first command line for Windows privacy policies: list, audit, preview, enforce, restore."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "pef"
+path = "src/main.rs"
+
+[dependencies]
+pef-core.workspace = true
+pef-platform.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+serde_json.workspace = true

@@ -1,22 +1,14 @@
-# Visual Studio and dotnet
+# Rust build output
+/target/
+**/target/
+
+# Editor and OS artifacts
 .vs/
+.idea/
 *.user
 *.suo
-
-# Build outputs
-**/bin/
-**/obj/
-
-# NuGet
-*.nupkg
-.nuget/
+Thumbs.db
+.DS_Store
 
 # Logs
 *.log
-
-# Rider/JetBrains
-.idea/
-
-# OS artifacts
-Thumbs.db
-.DS_Store

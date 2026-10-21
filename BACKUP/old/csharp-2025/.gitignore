@@ -1,0 +1,22 @@
+# Visual Studio and dotnet
+.vs/
+*.user
+*.suo
+
+# Build outputs
+**/bin/
+**/obj/
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Logs
+*.log
+
+# Rider/JetBrains
+.idea/
+
+# OS artifacts
+Thumbs.db
+.DS_Store

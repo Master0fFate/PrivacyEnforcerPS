@@ -1,0 +1,143 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Install Linux build dependencies for GPUI
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-xkb-dev \
+            libxcb-xfixes0-dev libxcb-randr0-dev libxcb-xinput-dev libxcb-cursor-dev \
+            libxcb-res0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libdbus-1-dev \
+            libfontconfig-dev libfreetype-dev libssl-dev libvulkan-dev
+      - name: Install the pinned Rust toolchain
+        run: rustup show active-toolchain
+      - uses: Swatinem/rust-cache@v2
+      - name: Tests must pass before anything is packaged
+        run: cargo test --workspace
+      - name: Build release binaries
+        run: cargo build --release --workspace --target ${{ matrix.target }}
+      - name: Smoke-test the command line without touching policies
+        shell: bash
+        run: |
+          set -euo pipefail
+          exe=target/${{ matrix.target }}/release/pef
+          [ "${{ runner.os }}" = "Windows" ] && exe="$exe.exe"
+          "$exe" version
+          "$exe" list --json > /dev/null
+          set +e
+          "$exe" enforce --select deliberately-invalid-policy
+          code=$?
+          set -e
+          test "$code" -eq 1
+      - name: Package
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          name="privacy-enforcer-${tag}-${{ matrix.target }}"
+          mkdir -p "dist/$name"
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            cp target/${{ matrix.target }}/release/pef.exe target/${{ matrix.target }}/release/pef-gui.exe "dist/$name/"
+          else
+            cp target/${{ matrix.target }}/release/pef target/${{ matrix.target }}/release/pef-gui "dist/$name/"
+          fi
+          cp README.md LICENSE CHANGELOG.md "dist/$name/"
+          cp crates/pef-gui/assets/fonts/OFL.txt "dist/$name/FONT-LICENSE-OFL.txt"
+          cd dist
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            7z a -tzip "$name.zip" "$name" > /dev/null
+            archive="$name.zip"
+          else
+            tar czf "$name.tar.gz" "$name"
+            archive="$name.tar.gz"
+          fi
+          sha256sum "$archive" > "$archive.sha256"
+          cat > "$name.build-metadata.json" <<JSON
+          {
+            "sourceCommit": "${GITHUB_SHA}",
+            "tag": "${tag}",
+            "target": "${{ matrix.target }}",
+            "toolchain": "$(rustc --version)",
+            "signed": false,
+            "archive": "${archive}",
+            "sha256": "$(cut -d' ' -f1 "$archive.sha256")"
+          }
+          JSON
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ${{ matrix.target }}
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
+            dist/*.sha256
+            dist/*.build-metadata.json
+          if-no-files-found: error
+  publish:
+    name: Publish the GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Write the release notes from the changelog
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          # Take the changelog section for this version, from its heading to the next one.
+          awk -v v="$version" '
+            /^## / { if (found) exit; if (index($0, v) > 0) { found = 1; next } }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "Release ${GITHUB_REF_NAME}. See CHANGELOG.md for details." > notes.md
+          fi
+          {
+            echo
+            echo "### Checksums"
+            echo
+            echo '```'
+            cat artifacts/*.sha256
+            echo '```'
+            echo
+            echo "Binaries are unsigned; compare the checksum before running them. Start with \`pef audit\` or the Audit screen of the desktop app, which never write."
+          } >> notes.md
+          cat notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: notes.md
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: |
+            artifacts/*.zip
+            artifacts/*.tar.gz
+            artifacts/*.sha256
+            artifacts/*.build-metadata.json

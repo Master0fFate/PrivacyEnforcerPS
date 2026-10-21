@@ -1,0 +1,32 @@
+[package]
+name = "pef-gui"
+description = "Desktop application for Privacy Enforcer built with GPUI Fast and a Vercel-style design system."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "pef-gui"
+path = "src/main.rs"
+
+[dependencies]
+pef-core.workspace = true
+pef-platform.workspace = true
+gpui.workspace = true
+gpui_platform.workspace = true
+serde_json.workspace = true
+unicode-segmentation.workspace = true
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
+gpui_platform = { workspace = true, features = ["wayland", "x11"] }
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+gpui_platform = { workspace = true, features = ["test-support"] }
+tempfile.workspace = true
